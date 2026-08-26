@@ -1,0 +1,202 @@
+[
+  {
+    "id": "CT-10002",
+    "date": "2026-08-25",
+    "timestamp": "2026-08-25T22:08:07.218415+00:00",
+    "label": "Malignant",
+    "confidence": 99.99,
+    "best_model": "VGG16",
+    "results": [
+      {
+        "model": "VGG16",
+        "available": true,
+        "label": "Malignant",
+        "confidence": 99.99,
+        "probability": 0.999937,
+        "known_val_accuracy": 98.71,
+        "accuracy_verified": true,
+        "note": null
+      },
+      {
+        "model": "InceptionV3",
+        "available": true,
+        "label": "Malignant",
+        "confidence": 99.96,
+        "probability": 0.999602,
+        "known_val_accuracy": 98.54,
+        "accuracy_verified": true,
+        "note": "Measured on a rebuilt holdout, not the original training split (which no longer exists) \u2014 small train/validation overlap is possible."
+      },
+      {
+        "model": "CNN (from scratch)",
+        "available": true,
+        "label": "Benign",
+        "confidence": 51.07,
+        "probability": 0.489313,
+        "known_val_accuracy": 51.63,
+        "accuracy_verified": true,
+        "note": "This model failed to learn \u2014 accuracy is close to random guessing."
+      }
+    ]
+  },
+  {
+    "id": "CT-10004",
+    "date": "2026-08-25",
+    "timestamp": "2026-08-25T22:20:50.737011+00:00",
+    "label": "Benign",
+    "confidence": 98.25,
+    "best_model": "VGG16",
+    "results": [
+      {
+        "model": "VGG16",
+        "available": true,
+        "label": "Benign",
+        "confidence": 98.25,
+        "probability": 0.017457,
+        "known_val_accuracy": 98.71,
+        "accuracy_verified": true,
+        "note": null
+      },
+      {
+        "model": "InceptionV3",
+        "available": true,
+        "label": "Benign",
+        "confidence": 99.36,
+        "probability": 0.006366,
+        "known_val_accuracy": 98.54,
+        "accuracy_verified": true,
+        "note": "Measured on a rebuilt holdout, not the original training split (which no longer exists) \u2014 small train/validation overlap is possible."
+      },
+      {
+        "model": "CNN (from scratch)",
+        "available": true,
+        "label": "Benign",
+        "confidence": 52.28,
+        "probability": 0.477198,
+        "known_val_accuracy": 51.63,
+        "accuracy_verified": true,
+        "note": "This model failed to learn \u2014 accuracy is close to random guessing."
+      }
+    ]
+  },
+  {
+    "id": "CT-10005",
+    "date": "2026-08-25",
+    "timestamp": "2026-08-25T22:21:15.653042+00:00",
+    "label": "Malignant",
+    "confidence": 100.0,
+    "best_model": "VGG16",
+    "results": [
+      {
+        "model": "VGG16",
+        "available": true,
+        "label": "Malignant",
+        "confidence": 100.0,
+        "probability": 1.0,
+        "known_val_accuracy": 98.71,
+        "accuracy_verified": true,
+        "note": null
+      },
+      {
+        "model": "InceptionV3",
+        "available": true,
+        "label": "Malignant",
+        "confidence": 96.45,
+        "probability": 0.964452,
+        "known_val_accuracy": 98.54,
+        "accuracy_verified": true,
+        "note": "Measured on a rebuilt holdout, not the original training split (which no longer exists) \u2014 small train/validation overlap is possible."
+      },
+      {
+        "model": "CNN (from scratch)",
+        "available": true,
+        "label": "Benign",
+        "confidence": 51.27,
+        "probability": 0.48727,
+        "known_val_accuracy": 51.63,
+        "accuracy_verified": true,
+        "note": "This model failed to learn \u2014 accuracy is close to random guessing."
+      }
+    ]
+  },
+  {
+    "id": "CT-10006",
+    "date": "2026-08-25",
+    "timestamp": "2026-08-25T22:39:41.200178+00:00",
+    "label": "Benign",
+    "confidence": 99.92,
+    "best_model": "VGG16",
+    "results": [
+      {
+        "model": "VGG16",
+        "available": true,
+        "label": "Benign",
+        "confidence": 99.92,
+        "probability": 0.00076,
+        "known_val_accuracy": 98.71,
+        "accuracy_verified": true,
+        "note": null
+      },
+      {
+        "model": "InceptionV3",
+        "available": true,
+        "label": "Benign",
+        "confidence": 99.83,
+        "probability": 0.0017,
+        "known_val_accuracy": 98.54,
+        "accuracy_verified": true,
+        "note": "Measured on a rebuilt holdout, not the original training split (which no longer exists) \u2014 small train/validation overlap is possible."
+      },
+      {
+        "model": "CNN (from scratch)",
+        "available": true,
+        "label": "Benign",
+        "confidence": 52.23,
+        "probability": 0.477747,
+        "known_val_accuracy": 51.63,
+        "accuracy_verified": true,
+        "note": "This model failed to learn \u2014 accuracy is close to random guessing."
+      }
+    ]
+  },
+  {
+    "id": "CT-10007",
+    "date": "2026-08-25",
+    "timestamp": "2026-08-25T22:45:06.672113+00:00",
+    "label": "Benign",
+    "confidence": 96.18,
+    "best_model": "VGG16",
+    "results": [
+      {
+        "model": "VGG16",
+        "available": true,
+        "label": "Benign",
+        "confidence": 96.18,
+        "probability": 0.038191,
+        "known_val_accuracy": 98.71,
+        "accuracy_verified": true,
+        "note": null
+      },
+      {
+        "model": "InceptionV3",
+        "available": true,
+        "label": "Benign",
+        "confidence": 89.6,
+        "probability": 0.104005,
+        "known_val_accuracy": 98.54,
+        "accuracy_verified": true,
+        "note": "Measured on a rebuilt holdout, not the original training split (which no longer exists) \u2014 small train/validation overlap is possible."
+      },
+      {
+        "model": "CNN (from scratch)",
+        "available": true,
+        "label": "Benign",
+        "confidence": 52.13,
+        "probability": 0.478652,
+        "known_val_accuracy": 51.63,
+        "accuracy_verified": true,
+        "note": "This model failed to learn \u2014 accuracy is close to random guessing."
+      }
+    ]
+  }
+]

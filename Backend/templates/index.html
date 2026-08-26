@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lung Cancer Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 700px;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .upload-area {
+            border: 3px dashed #ddd;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            margin-bottom: 20px;
+        }
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+        .upload-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .file-label {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+        .file-label:hover {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+        #fileName {
+            display: block;
+            color: #666;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 15px auto;
+            display: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .predict-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .predict-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .predict-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .benign {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            display: block;
+        }
+        .malignant {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            display: block;
+        }
+        .loading {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            display: block;
+        }
+        .result-title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .result-detail {
+            text-align: center;
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        .confidence-bar {
+            width: 100%;
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 25px;
+            margin: 15px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .confidence-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .result-note {
+            text-align: center;
+            font-size: 0.95em;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .benign-note {
+            background: #c3e6cb;
+            color: #155724;
+        }
+        .malignant-note {
+            background: #f5c6cb;
+            color: #721c24;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.85em;
+        }
+        .error-msg {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #f5c6cb;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🫁 Lung Cancer Detection</h1>
+        <p class="subtitle">AI-powered analysis of CT scan images</p>
+        
+        <div class="upload-area" id="dropZone">
+            <span class="upload-icon">📤</span>
+            <p><strong>Drop your CT scan image here</strong></p>
+            <p style="color: #999; font-size: 0.9em;">or click to browse</p>
+            <input type="file" id="imageInput" accept="image/*" required>
+            <label for="imageInput" class="file-label">Choose Image</label>
+            <span id="fileName">No file selected</span>
+            <img id="imagePreview" alt="Image preview">
+        </div>
+        
+        <button class="predict-btn" id="predictBtn" disabled>🔍 Analyze Image</button>
+        
+        <div id="result"></div>
+        <div class="footer">Powered by TensorFlow & InceptionV3</div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('imageInput');
+        const fileName = document.getElementById('fileName');
+        const preview = document.getElementById('imagePreview');
+        const predictBtn = document.getElementById('predictBtn');
+        const resultDiv = document.getElementById('result');
+        const dropZone = document.getElementById('dropZone');
+
+        // File selection handler
+        fileInput.addEventListener('change', function(e) {
+            const file = this.files[0];
+            if (file) {
+                fileName.textContent = `📎 ${file.name}`;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+                predictBtn.disabled = false;
+                resultDiv.style.display = 'none';
+            }
+        });
+
+        // Drag and drop handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#667eea';
+            dropZone.style.background = '#f0f2ff';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#ddd';
+            dropZone.style.background = '#fafafa';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#ddd';
+            dropZone.style.background = '#fafafa';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Prediction handler
+        predictBtn.addEventListener('click', async () => {
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select an image first');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            predictBtn.disabled = true;
+            predictBtn.textContent = '⏳ Analyzing...';
+            
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'loading';
+            resultDiv.innerHTML = `
+                <div class="result-title">⏳ Processing</div>
+                <div class="result-detail">Analyzing image with AI model...</div>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: 100%; background: #ffc107;">
+                        Loading...
+                    </div>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultDiv.className = 'error-msg';
+                    resultDiv.innerHTML = `
+                        <div style="font-size: 1.2em; font-weight: bold;">❌ Error</div>
+                        <div>${data.error}</div>
+                    `;
+                } else {
+                    const isBenign = data.prediction === 'Benign';
+                    resultDiv.className = isBenign ? 'benign' : 'malignant';
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result-title">${isBenign ? '✅' : '⚠️'} ${data.prediction}</div>
+                        <div class="result-detail">
+                            <strong>Confidence:</strong> ${data.confidence}%
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${data.confidence}%; 
+                                background: ${isBenign ? '#28a745' : '#dc3545'};">
+                                ${data.confidence}%
+                            </div>
+                        </div>
+                        <div class="result-note ${isBenign ? 'benign-note' : 'malignant-note'}">
+                            ${isBenign ? 
+                                '🟢 Low risk detected. Please consult with your doctor for confirmation.' : 
+                                '🔴 High risk detected. Please consult with a medical professional immediately.'
+                            }
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.className = 'error-msg';
+                resultDiv.innerHTML = `
+                    <div style="font-size: 1.2em; font-weight: bold;">❌ Connection Error</div>
+                    <div>${error.message}</div>
+                    <div style="margin-top: 10px; font-size: 0.9em;">Make sure the server is running</div>
+                `;
+            } finally {
+                predictBtn.disabled = false;
+                predictBtn.textContent = '🔍 Analyze Image';
+            }
+        });
+
+        // Check server health on load
+        async function checkHealth() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                if (data.model_loaded) {
+                    console.log('✅ Server is ready');
+                } else {
+                    console.warn('⚠️ Model not loaded');
+                }
+            } catch (error) {
+                console.error('❌ Server not reachable');
+            }
+        }
+        checkHealth();
+    </script>
+</body>
+</html>
