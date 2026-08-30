@@ -148,13 +148,6 @@ def get_scans():
     return jsonify({"success": True, "scans": scans_sorted})
 
 
-@app.route("/api/scans", methods=["DELETE"])
-def clear_scans():
-    with _scans_lock:
-        _save_scans([])
-    return jsonify({"success": True})
-
-
 @app.route("/api/scans/<scan_id>", methods=["DELETE"])
 def delete_scan(scan_id):
     with _scans_lock:
@@ -242,7 +235,7 @@ def check_looks_like_ct_scan(img_bytes):
 # LOAD MODELS
 #
 # Each model loads independently — if one file is missing or fails to
-# load, the other two still work and /health reports which are up.
+# load, the other two still work.
 # ============================================================
 
 print("=" * 60)
@@ -274,27 +267,6 @@ print("=" * 60)
 @app.route("/")
 def home():
     return render_template("index.html")
-
-
-# ============================================================
-# HEALTH CHECK
-# ============================================================
-
-@app.route("/health", methods=["GET"])
-def health():
-    return jsonify({
-        "status": "ok" if loaded_models else "degraded",
-        "models": {
-            key: {
-                "label": cfg["label"],
-                "loaded": key in loaded_models,
-                "known_val_accuracy": cfg["known_val_accuracy"],
-                "accuracy_verified": cfg["accuracy_verified"],
-                "note": cfg["note"],
-            }
-            for key, cfg in MODEL_REGISTRY.items()
-        },
-    })
 
 
 # ============================================================

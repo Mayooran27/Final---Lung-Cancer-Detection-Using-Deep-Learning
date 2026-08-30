@@ -14,7 +14,7 @@ import Layout, { LABEL_META } from './Layout';
 import CheckScanPanel from './CheckScanPanel';
 import { computeStats, formatScanTime, useScans } from '../lib/scans';
 
-export default function DashboardPage({ user, onLogout }) {
+export default function DashboardPage({ user }) {
   const { scans, refresh, deleteScan } = useScans();
   const stats = computeStats(scans);
   const recent = scans.slice(0, 5);
@@ -31,10 +31,9 @@ export default function DashboardPage({ user, onLogout }) {
   return (
     <Layout
       active="dashboard"
-      title={`Welcome back, ${user?.name || 'Clinician'}`}
+      title={user?.name ? `Welcome back, ${user.name}` : 'Welcome back'}
       subtitle="Upload a CT slice to get a prediction, or review recent scans below."
       user={user}
-      onLogout={onLogout}
     >
       <div className="lcds-stats">
         {stats.map((s) => (

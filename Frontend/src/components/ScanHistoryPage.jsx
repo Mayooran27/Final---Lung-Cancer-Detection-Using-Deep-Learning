@@ -11,7 +11,7 @@ import React from 'react';
 import Layout, { LABEL_META } from './Layout';
 import { formatScanTime, useScans } from '../lib/scans';
 
-export default function ScanHistoryPage({ user, onLogout }) {
+export default function ScanHistoryPage({ user }) {
   const { scans, loading, offline, refresh, deleteScan } = useScans();
 
   const handleDelete = async (id) => {
@@ -29,7 +29,6 @@ export default function ScanHistoryPage({ user, onLogout }) {
       title="Scan history"
       subtitle="Every CT scan checked through the system, newest first."
       user={user}
-      onLogout={onLogout}
     >
       <section className="lcds-panel">
         <div className="lcds-panel__head">

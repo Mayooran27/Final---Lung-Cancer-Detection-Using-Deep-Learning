@@ -151,8 +151,7 @@ export default function CheckScanPanel({ onChecked }) {
               </ul>
             </>
           ) : (
-            <span className="lcds-result__empty">Prediction
-             from all three models will appear here once you check a scan.</span>
+            <span className="lcds-result__empty">Prediction from all three models will appear here once you check a scan.</span>
           )}
         </div>
       </div>

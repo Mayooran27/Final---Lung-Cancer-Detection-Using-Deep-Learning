@@ -3,12 +3,12 @@
  * -----------------------------------------------------------------------
  * Shared chrome for every clinician-facing page: sidebar nav, topbar, and
  * the design-language stylesheet. Dashboard.jsx used to inline all of this
- * plus its own page content in one file, which is why "Upload scan",
- * "Scan history" and "Settings" rendered as plain <button> elements with
- * no destination — they were never wired to a route. Each real page
- * (DashboardPage, UploadScanPage, ScanHistoryPage, SettingsPage) now wraps
- * its own content in <Layout>, which highlights the right nav item via the
- * current router location and turns the other items into real <Link>s.
+ * plus its own page content in one file, which is why "Upload scan" and
+ * "Scan history" rendered as plain <button> elements with no destination —
+ * they were never wired to a route. Each real page (DashboardPage,
+ * UploadScanPage, ScanHistoryPage) now wraps its own content in <Layout>,
+ * which highlights the right nav item via the current router location and
+ * turns the other items into real <Link>s.
  * -----------------------------------------------------------------------
  */
 import React from 'react';
@@ -51,8 +51,6 @@ export function Icon({ name }) {
     case 'grid': return <svg {...common}><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>;
     case 'upload': return <svg {...common}><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>;
     case 'history': return <svg {...common}><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg>;
-    case 'settings': return <svg {...common}><circle cx="12" cy="12" r="3"/><path d="M19.4 12.9a7.6 7.6 0 0 0 0-1.8l2-1.5-2-3.4-2.3.9a7.4 7.4 0 0 0-1.6-.9L15 3.5H9l-.5 2.7a7.4 7.4 0 0 0-1.6.9l-2.3-.9-2 3.4 2 1.5a7.6 7.6 0 0 0 0 1.8l-2 1.5 2 3.4 2.3-.9c.5.4 1 .7 1.6.9l.5 2.7h6l.5-2.7c.6-.2 1.1-.5 1.6-.9l2.3.9 2-3.4-2-1.5Z"/></svg>;
-    case 'logout': return <svg {...common}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>;
     case 'lungs': return <svg {...common}><path d="M9 3c-2.5 0-4 2.2-4 5.5V16c0 3 1.6 5.5 3.6 5.5.9 0 1.4-.7 1.4-1.8V5C10 3.8 9.7 3 9 3ZM17 3c2.5 0 4 2.2 4 5.5V16c0 3-1.6 5.5-3.6 5.5-.9 0-1.4-.7-1.4-1.8V5c0-1.2.3-2 1-2Z"/></svg>;
     default: return null;
   }
@@ -62,10 +60,9 @@ const NAV_ITEMS = [
   { key: 'dashboard', to: '/home', icon: 'grid', label: 'Dashboard' },
   { key: 'upload', to: '/upload', icon: 'upload', label: 'Upload scan' },
   { key: 'history', to: '/history', icon: 'history', label: 'Scan history' },
-  { key: 'settings', to: '/settings', icon: 'settings', label: 'Settings' },
 ];
 
-export default function Layout({ active, title, subtitle, user, onLogout, children }) {
+export default function Layout({ active, title, subtitle, user, children }) {
   const location = useLocation();
   const activeKey = active || NAV_ITEMS.find((n) => n.to === location.pathname)?.key;
 
@@ -137,7 +134,6 @@ export default function Layout({ active, title, subtitle, user, onLogout, childr
         .lcds-side__item:hover { color: var(--text-hi); background: rgba(255,255,255,0.05); }
         .lcds-side__item.active { color: #fff; background: var(--accent); }
         .lcds-side__spacer { flex: 1; }
-        .lcds-side__item.logout:hover { background: rgba(255,93,108,0.12); color: #ff9aa4; }
 
         /* Main */
         .lcds-main { flex: 1; min-width: 0; padding: 28px 36px 48px; }
@@ -380,40 +376,6 @@ export default function Layout({ active, title, subtitle, user, onLogout, childr
         .lcds-table th.actions, .lcds-table td.actions { text-align: right; }
         .lcds-table__empty { padding: 24px 12px; text-align: center; color: var(--ink-mu); font-size: 13px; }
 
-        /* Settings form */
-        .lcds-field { margin-bottom: 16px; max-width: 360px; }
-        .lcds-field label {
-          display: block;
-          font-size: 12.5px;
-          font-weight: 600;
-          color: var(--ink-mu);
-          margin-bottom: 6px;
-        }
-        .lcds-field input {
-          width: 100%;
-          padding: 9px 12px;
-          border-radius: 8px;
-          border: 1px solid #dfe2f0;
-          font-size: 13.5px;
-          font-family: 'Inter', sans-serif;
-          color: var(--ink);
-          box-sizing: border-box;
-        }
-        .lcds-field input:focus { outline: none; border-color: var(--accent); }
-        .lcds-field__static {
-          font-family: 'IBM Plex Mono', monospace;
-          font-size: 12.5px;
-          color: var(--ink-mu);
-          background: #fafbff;
-          border: 1px solid #edeff8;
-          border-radius: 8px;
-          padding: 9px 12px;
-        }
-        .lcds-saved-note { font-size: 12.5px; color: #1fae7f; margin-left: 10px; }
-        .lcds-status-dot {
-          display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px;
-        }
-
         @media (max-width: 980px) {
           .lcds-stats { grid-template-columns: repeat(2, 1fr); }
           .lcds-upload { grid-template-columns: 1fr; }
@@ -442,9 +404,6 @@ export default function Layout({ active, title, subtitle, user, onLogout, childr
           ))}
         </nav>
         <div className="lcds-side__spacer" />
-        <button className="lcds-side__item logout" onClick={onLogout}>
-          <Icon name="logout" /> Log out
-        </button>
       </aside>
 
       <main className="lcds-main">
@@ -453,10 +412,12 @@ export default function Layout({ active, title, subtitle, user, onLogout, childr
             <h1>{title}</h1>
             <p>{subtitle}</p>
           </div>
-          <div className="lcds-avatar">
-            <div className="lcds-avatar__circle">{(user?.name || 'C').slice(0, 1).toUpperCase()}</div>
-            <span>{user?.name || 'Clinician'}</span>
-          </div>
+          {user?.name && (
+            <div className="lcds-avatar">
+              <div className="lcds-avatar__circle">{user.name.slice(0, 1).toUpperCase()}</div>
+              <span>{user.name}</span>
+            </div>
+          )}
         </div>
 
         {children}

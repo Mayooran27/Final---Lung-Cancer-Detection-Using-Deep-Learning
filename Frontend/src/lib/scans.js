@@ -80,12 +80,6 @@ export function useScans() {
     refresh();
   }, [refresh]);
 
-  const clearHistory = useCallback(async () => {
-    const res = await fetch(`${API_BASE}/api/scans`, { method: 'DELETE' });
-    if (!res.ok) throw new Error('failed to clear scan history');
-    await refresh();
-  }, [refresh]);
-
   const deleteScan = useCallback(async (id) => {
     const res = await fetch(`${API_BASE}/api/scans/${encodeURIComponent(id)}`, { method: 'DELETE' });
     if (!res.ok) {
@@ -95,5 +89,5 @@ export function useScans() {
     await refresh();
   }, [refresh]);
 
-  return { scans, loading, offline, refresh, clearHistory, deleteScan };
+  return { scans, loading, offline, refresh, deleteScan };
 }
