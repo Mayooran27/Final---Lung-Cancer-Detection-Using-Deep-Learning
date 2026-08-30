@@ -12,9 +12,7 @@ from keras.models import load_model
 from keras.preprocessing import image
 
 
-# ============================================================
-# PATHS
-# ============================================================
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,29 +20,7 @@ TEMPLATE_FOLDER = os.path.join(BASE_DIR, "templates")
 STATIC_FOLDER = os.path.join(BASE_DIR, "static")
 
 
-# ============================================================
-# MODEL REGISTRY
-#
-# Each entry describes one trained model: where its file lives, what input
-# size/preprocessing it expects (must match what its own notebook used when
-# training it), and its measured validation accuracy so the API can flag
-# a "best" model instead of just dumping three raw numbers on the client.
-#
-# known_val_accuracy sources (all measured directly, not estimated):
-#   - vgg16:        best epoch (17/20) of this session's training run in
-#                    Lung_Cancer_Dataset_IQ_OTHNCCD_VGG_16_.ipynb, on its own
-#                    854-image held-out validation split.
-#   - cnn:           measured directly against Split_data_CNN_0/validation
-#                    (860 images) after training — the model barely trained
-#                    at all (~50%, i.e. random guessing for a binary task).
-#   - inception_v3:  this model's own validation split folder was empty, so
-#                    it was measured against a freshly rebuilt 20% holdout
-#                    (480 images) from the raw dataset instead. Because the
-#                    original split used to train Inception_v3.hdf5 is
-#                    unknown/lost, some of this holdout may overlap with
-#                    what it was originally trained on — flagged via `note`
-#                    below so the number is shown with that caveat attached.
-# ============================================================
+
 
 MODEL_REGISTRY = {
     "vgg16": {
@@ -76,14 +52,9 @@ MODEL_REGISTRY = {
     },
 }
 
-# Same binary class order for every model here — each notebook trained with
-# 0 = Benign, 1 = Malignant.
 CLASS_NAMES = ["Benign", "Malignant"]
 
 
-# ============================================================
-# FLASK APP
-# ============================================================
 
 app = Flask(
     __name__,
@@ -100,16 +71,7 @@ def add_cors_headers(response):
     return response
 
 
-# ============================================================
-# SCAN HISTORY
-#
-# The frontend's dashboard used to show a hardcoded sample list that never
-# changed, no matter what was actually checked. Every successful /api/predict
-# call now appends a record here, persisted to a JSON file so history
-# survives server restarts, and GET /api/scans serves it back so the
-# dashboard's stat cards ("Total scans", "Malignant", ...) and "Recent
-# scans" table reflect real, current data.
-# ============================================================
+
 
 SCANS_FILE = os.path.join(BASE_DIR, "scans_history.json")
 _scans_lock = threading.Lock()
@@ -172,34 +134,7 @@ def allowed_file(filename):
     )
 
 
-# ============================================================
-# INPUT GATE — reject images that aren't grayscale CT slices
-#
-# All three models were trained only on lung CT scans (grayscale, 0=Benign
-# vs 1=Malignant) and have no "not a CT scan" class — handed a photo of
-# anything else, they will still confidently output Benign or Malignant
-# because that's the only vocabulary they have. There's no separate
-# "is this a chest CT" classifier trained here, so this is a heuristic,
-# not a learned check: a real chest CT slice is essentially grayscale
-# (equal R/G/B per pixel, give or take compression noise), while an
-# ordinary photo has real, visible color somewhere in it.
-#
-# A single whole-image mean saturation isn't reliable — a portrait shot
-# against a large dark background averages out to a low number even
-# though the subject is clearly colorful, letting it slide right through.
-# Instead this measures the *fraction of pixels that are unambiguously
-# colorful*: for each pixel, chroma = max(R,G,B) - min(R,G,B) (raw channel
-# spread, not normalized by brightness the way HSV saturation is — that
-# normalization is what makes near-black noise register as "100% saturated"
-# and is what breaks a simple mean-saturation check). Near-black and
-# near-white pixels are excluded first since compression noise there is
-# unreliable and CT scans are dominated by exactly those (black background,
-# bright bone). If more than ~10% of the remaining pixels are clearly
-# colorful, the image is rejected. A grayscale non-CT image (e.g. a B&W
-# photo) can still slip through — chroma alone can't tell "CT scan" from
-# "any grayscale picture" — but that's a real limitation to know about,
-# not something silently pretended away.
-# ============================================================
+
 
 COLORFUL_PIXEL_FRACTION_MAX = 0.10
 CHROMA_THRESHOLD = 30       # 0-255 max-min channel spread counted as "colorful"
@@ -231,12 +166,6 @@ def check_looks_like_ct_scan(img_bytes):
     return colorful_fraction <= COLORFUL_PIXEL_FRACTION_MAX, round(colorful_fraction, 4)
 
 
-# ============================================================
-# LOAD MODELS
-#
-# Each model loads independently — if one file is missing or fails to
-# load, the other two still work.
-# ============================================================
 
 print("=" * 60)
 print("Loading Lung Cancer Detection models")
@@ -260,18 +189,14 @@ print(f"{len(loaded_models)}/{len(MODEL_REGISTRY)} models loaded")
 print("=" * 60)
 
 
-# ============================================================
-# HOME PAGE
-# ============================================================
+
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-# ============================================================
-# PREDICTION — runs the uploaded image through every loaded model
-# ============================================================
+
 
 def predict_with_model(model, img_bytes, target_size):
     # Keras 3's load_img only accepts a path or an io.BytesIO — a Werkzeug
@@ -426,9 +351,7 @@ def predict():
         return jsonify({"success": False, "error": str(e)}), 500
 
 
-# ============================================================
-# RUN SERVER
-# ============================================================
+
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)

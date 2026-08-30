@@ -1,14 +1,4 @@
-/**
- * DashboardPage.jsx
- * -----------------------------------------------------------------------
- * Overview page: live stat cards, the "Check a CT scan" panel, and the 5
- * most recent scans. Stats and the recent-scans table are both derived
- * from useScans(), which reads real history from the backend — so a
- * successful check immediately bumps the right counter and adds a row
- * with the actual server timestamp, instead of the old hardcoded sample
- * data that never changed.
- * -----------------------------------------------------------------------
- */
+
 import React from 'react';
 import Layout, { LABEL_META } from './Layout';
 import CheckScanPanel from './CheckScanPanel';

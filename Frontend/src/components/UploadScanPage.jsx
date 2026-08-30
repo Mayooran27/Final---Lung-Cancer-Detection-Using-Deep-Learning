@@ -1,11 +1,4 @@
-/**
- * UploadScanPage.jsx
- * -----------------------------------------------------------------------
- * Dedicated full-page version of the "Check a CT scan" flow, reached from
- * the sidebar's "Upload scan" item (previously an inert button). Reuses
- * CheckScanPanel so behavior stays identical to the Dashboard's copy.
- * -----------------------------------------------------------------------
- */
+
 import React from 'react';
 import Layout from './Layout';
 import CheckScanPanel from './CheckScanPanel';

@@ -118,5 +118,45 @@
         "note": "This model failed to learn \u2014 accuracy is close to random guessing."
       }
     ]
+  },
+  {
+    "id": "CT-10004",
+    "date": "2026-08-30",
+    "timestamp": "2026-08-30T19:30:46.488928+00:00",
+    "label": "Malignant",
+    "confidence": 100.0,
+    "best_model": "VGG16",
+    "results": [
+      {
+        "model": "VGG16",
+        "available": true,
+        "label": "Malignant",
+        "confidence": 100.0,
+        "probability": 0.999996,
+        "known_val_accuracy": 98.71,
+        "accuracy_verified": true,
+        "note": null
+      },
+      {
+        "model": "InceptionV3",
+        "available": true,
+        "label": "Malignant",
+        "confidence": 100.0,
+        "probability": 0.999968,
+        "known_val_accuracy": 98.54,
+        "accuracy_verified": true,
+        "note": "Measured on a rebuilt holdout, not the original training split (which no longer exists) \u2014 small train/validation overlap is possible."
+      },
+      {
+        "model": "CNN (from scratch)",
+        "available": true,
+        "label": "Benign",
+        "confidence": 51.16,
+        "probability": 0.488364,
+        "known_val_accuracy": 51.63,
+        "accuracy_verified": true,
+        "note": "This model failed to learn \u2014 accuracy is close to random guessing."
+      }
+    ]
   }
 ]

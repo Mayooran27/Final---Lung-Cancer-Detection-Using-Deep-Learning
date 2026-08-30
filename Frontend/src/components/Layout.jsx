@@ -1,16 +1,4 @@
-/**
- * Layout.jsx
- * -----------------------------------------------------------------------
- * Shared chrome for every clinician-facing page: sidebar nav, topbar, and
- * the design-language stylesheet. Dashboard.jsx used to inline all of this
- * plus its own page content in one file, which is why "Upload scan" and
- * "Scan history" rendered as plain <button> elements with no destination —
- * they were never wired to a route. Each real page (DashboardPage,
- * UploadScanPage, ScanHistoryPage) now wraps its own content in <Layout>,
- * which highlights the right nav item via the current router location and
- * turns the other items into real <Link>s.
- * -----------------------------------------------------------------------
- */
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 

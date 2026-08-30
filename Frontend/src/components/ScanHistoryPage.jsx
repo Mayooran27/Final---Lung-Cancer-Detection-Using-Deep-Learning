@@ -1,12 +1,4 @@
-/**
- * ScanHistoryPage.jsx
- * -----------------------------------------------------------------------
- * Full scan history (not just the Dashboard's last-5 preview), reached
- * from the sidebar's "Scan history" item. Backed by the same useScans()
- * hook, with a manual refresh button since a clinician may have this tab
- * open while checking scans elsewhere.
- * -----------------------------------------------------------------------
- */
+
 import React from 'react';
 import Layout, { LABEL_META } from './Layout';
 import { formatScanTime, useScans } from '../lib/scans';
