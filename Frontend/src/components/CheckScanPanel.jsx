@@ -1,13 +1,4 @@
-/**
- * CheckScanPanel.jsx
- * -----------------------------------------------------------------------
- * The "upload + run through all three models" flow, extracted out of
- * dashboard.jsx so both the Dashboard overview and the dedicated
- * "Upload scan" page can use it. On a successful prediction it calls
- * onChecked() so the caller can refresh scan history/stats from the
- * backend — the new scan was just persisted server-side by /api/predict.
- * -----------------------------------------------------------------------
- */
+
 import React, { useRef, useState } from 'react';
 import { API_BASE } from '../lib/scans';
 import { ConfidenceRing, Icon, LABEL_META } from './Layout';
